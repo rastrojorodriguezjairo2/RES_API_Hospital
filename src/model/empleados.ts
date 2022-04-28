@@ -6,23 +6,28 @@ const empleSchema = new Schema({
       unique: true
     },
     _nombre: {
-        type: String
+        type: String,
+        required: true
       },
     _apellido: {
-        type: String
+        type: String,
+        required: true
       },
     _contacto: {
         type: Number,
-        unique: true,
+        unique: true
       },
     _sueldo: {
-        type: Number
+        type: Number,
+        required: true
     },
-    _tipo: {
-        type: String
+    _puesto: {
+      type: String,
+      required
+      : true
     },
     _especialidad: {
-      type: String,
+      type: String
     },
     _idiomas: {
         type: Array,
@@ -30,22 +35,33 @@ const empleSchema = new Schema({
     }
 })
 
+export type empgeneral = {
+  _id: number | null,
+  _nombre: string | null,
+  _apellido: string | null,
+  _contacto: number | null,
+  _sueldo: number | null,
+  _puesto: string | null,
+  _especialidad: string | null,
+  _idioma: string [] | null
+}
+
 export type empmedico = {
-    _id: number | null
+    _id: number | null,
     _nombre: string | null,
     _apellido: string | null,
     _contacto: number | null,
     _sueldo: number | null,
-    _tipo: string | null,
+    _puesto: string | null,
     _especialidad: string | null
 }
 export type empadmin = {
-    _id: number | null
+    _id: number | null,
     _nombre: string | null,
     _apellido: string | null,
     _contacto: number | null,
     _sueldo: number | null,
-    _tipo: string | null,
+    _puesto: string | null,
     _idioma: string [] | null
 }
 export const Trabajadores = model('empleados', empleSchema)

@@ -38,18 +38,20 @@ class Routes {
         await db.desconectarBD()
     }
     //Añadir un nuevo Empleado
-    private postempleados = async (req: Request, res: Response) => {
-        const { id, nombre, apellido, contacto, puesto, especialidad, idiomas, sueldo } = req.body
+    private postempleado = async (req: Request, res: Response) => {
+        console.log("HOLA")
+        const { id, nombre, apellido, contacto, sueldo, puesto, especialidad, idiomas} = req.body
         await db.conectarBD()
+        console.log(req.body)
         const dSchema={
             _id: id,
             _nombre: nombre,
             _apellido: apellido,
             _contacto: contacto,
-            _puesto: puesto,
+            _sueldo: sueldo,
+            _puesto: puesto, 
             _especialidad: especialidad,
-            _idiomas: idiomas,
-            _sueldo: sueldo
+            _idiomas: idiomas
         }
         const oSchema = new Trabajadores(dSchema)
         await oSchema.save()
@@ -100,7 +102,7 @@ class Routes {
         await db.conectarBD()
         .then(async ()=>{
             const query = await Trabajadores.find({
-                "_tipo": 'medico'
+                "_puesto": 'medico'
             })
          res.json(query)   
         })
@@ -115,7 +117,7 @@ class Routes {
         .then(async ()=>{
             const query = await Trabajadores.aggregate([{
                 $match:{
-                    "_tipo": 'administrativo'
+                    "_puesto": 'administrativo'
                 }
             }
         ])
@@ -230,7 +232,7 @@ class Routes {
     //Actualizar o cambiar los datos de un empleado especifico
     private updateempleado = async (req: Request, res: Response) => {
         const {id} = req.params
-        const {nombre, apellido, contacto, sueldo, idiomas} = req.body
+        const {nombre, apellido, contacto, sueldo, puesto, idiomas} = req.body
         await db.conectarBD()
         await Trabajadores.findOneAndUpdate({
             _id: id
@@ -239,7 +241,8 @@ class Routes {
             _apellido: apellido,
             _contacto: contacto,
             _sueldo: sueldo,
-            _idiomas: idiomas,
+            _puesto: puesto,
+            _idiomas: idiomas
         },{
             new:true,
             runValidators:true
@@ -289,7 +292,7 @@ class Routes {
     }
     misRutas(){
         this._router.post('/newpaciente', this.postpacientes),
-        this._router.post('/newempleado', this.postempleados),
+        this._router.post('/newempleado', this.postempleado),
         this._router.get('/verpaciente', this.getPacientes),
         this._router.get('/verurgencias', this.getUrgencias),
         this._router.get('/vercovid', this.getCovid),
